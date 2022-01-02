@@ -1,51 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TRLang.src.Lexer.TokenValue;
 
 namespace TRLang.src.Lexer
 {
-    enum TokenType
-    {
-        Int,
-        Float,
-
-        Plus,
-        Minus,
-        Mul,
-        Div,
-        Assign,
-
-        LRound,
-        RRound,
-        LCurly,
-        RCurly,
-
-        Semi,
-        Colon,
-        Comma,
-        Dot,
-
-        IntType,
-        FloatType,
-
-        Id,
-        Eof,
-        
-        Empty,
-
-        // Reserved keywords
-        Main,
-        Var,
-        Func
-    }
-
     class Token
     {
         public TokenType Type { get; private set; }
-        public TokenValue Value { get; private set; }
+        public TokenValue.TokenValue Value { get; private set; }
         public int Line { get; private set; }
         public int Column { get; private set; }
-        
+
         public Token()
         {
             this.Type = TokenType.Empty;
@@ -60,7 +23,7 @@ namespace TRLang.src.Lexer
             this.Column = column;
         }
 
-        public Token(TokenType tokenType, TokenValue tokenValue, int line, int column)
+        public Token(TokenType tokenType, TokenValue.TokenValue tokenValue, int line, int column)
         {
             this.Type = tokenType;
             this.Value = tokenValue;

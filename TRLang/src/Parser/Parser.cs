@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TRLang.src.Error;
 using TRLang.src.Lexer;
+using TRLang.src.Lexer.TokenValue;
 using TRLang.src.Parser.AbstractSyntaxTree;
 
 namespace TRLang.src.Parser

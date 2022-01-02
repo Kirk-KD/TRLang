@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TRLang.src.Error;
 using TRLang.src.Lexer;
 using TRLang.src.Parser.AbstractSyntaxTree;
@@ -132,7 +128,7 @@ namespace TRLang.src
 
             return new Void();
         }
-        
+
         protected override Void Visit(Program node)
         {
             ScopedSymbolTable globalScope = new ScopedSymbolTable("<GLOBAL>", 1, this.CurrentScope); // this.CurrentScope is the builtins scope.

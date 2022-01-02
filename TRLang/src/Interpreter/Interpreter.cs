@@ -6,7 +6,7 @@ namespace TRLang.src.Interpreter
 {
     class Interpreter : AstNodeVisitor<InterpreterVisitResult>
     {
-        private AstNode RootNode;
+        private readonly AstNode RootNode;
         public Dictionary<string, object> GlobalMemory { get; private set; } = new Dictionary<string, object>();
 
         public Interpreter(AstNode node)

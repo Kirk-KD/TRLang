@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TRLang.src.Error;
+using TRLang.src.Lexer.TokenValue;
 
 namespace TRLang.src.Lexer
 {

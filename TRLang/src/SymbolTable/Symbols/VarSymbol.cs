@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TRLang.src.SymbolTable.Symbols
+﻿namespace TRLang.src.SymbolTable.Symbols
 {
     class VarSymbol : Symbol
     {
