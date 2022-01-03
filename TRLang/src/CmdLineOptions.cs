@@ -31,6 +31,9 @@ namespace TRLang
             HelpText = "Log symbol table activities (symbol insertions and lookups) and contents of symbol tables when exiting the corresponding scopes.")]
         public bool LogSymbolTables { get; private set; }
 
+        [Option("log-stack", Required = false, HelpText = "Log the call stack and its contents.")]
+        public bool LogCallStack { get; private set; }
+
         // Other flags
         [Option('p', "pause", Required = false, HelpText = "Press any key to exit after executing.")]
         public bool PauseAfterExecuting { get; private set; }

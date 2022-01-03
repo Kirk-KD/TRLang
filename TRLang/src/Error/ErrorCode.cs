@@ -4,6 +4,7 @@
     {
         UnexpectedToken,
         IdNotFound,
-        DuplicateId
+        DuplicateId,
+        IncorrectParamsCount
     }
 }

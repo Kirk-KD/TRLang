@@ -20,7 +20,7 @@ namespace TRLang.src.Parser
 
         private void Eat(TokenType tokenType)
         {
-            this.Log($"TokenExpectation: Expected={tokenType}, Actual={this._currentToken.Type}");
+            Log($"TokenExpectation: Expected={tokenType}, Actual={this._currentToken.Type}");
 
             if (this._currentToken.IsType(tokenType)) this._currentToken = this._lexer.GetNextToken();
             else this.Error(ErrorCode.UnexpectedToken, this._currentToken, $"Expected a token of type {tokenType}");
@@ -37,7 +37,12 @@ namespace TRLang.src.Parser
         * program              : statement
         * compound_statement   : L_CURLY statement_list R_CURLY
         * statement_list       : statement | statement SEMI statement_list
-        * statement            : compound_statement | assignment_statement | decl_statement | empty
+        * statement            : compound_statement
+        *                      | assignment_statement
+        *                      | var_decl_statement
+        *                      | func_decl_statement
+        *                      | func_call_statement
+        *                      | empty
         * variable_decl        : type_spec ID (ASSIGN expr)
         * type_spec            : INT_TYPE | FLOAT_TYPE
         * assignment_statement : variable ASSIGN expr
@@ -47,6 +52,7 @@ namespace TRLang.src.Parser
         * formal_param_list    : formal_param (COMA formal_param)*
         * function_decl        : FUNC ID LROUND formal_param_list RROUND statement
         * func_decl_statement  : function_decl
+        * func_call_statement  : ID L_ROUND (expr (COMMA expr)*)? R_ROUND
         * empty                :
         * expr                 : term ((PLUS | MINUS) term)*
         * term                 : factor ((MUL | DIV) factor)*
@@ -186,15 +192,18 @@ namespace TRLang.src.Parser
 
             if (!this._currentToken.IsType(TokenType.Id)) return paramList;
 
-            do
+            while (true)
             {
                 AstNode var = this.Variable();
                 this.Eat(TokenType.Colon);
                 AstNode type = this.TypeSpec();
 
                 paramList.Add(new Param(var, type));
+
+                if (!this._currentToken.IsType(TokenType.Comma)) break;
+
+                this.Eat(TokenType.Comma);
             }
-            while (this._currentToken.IsType(TokenType.Comma));
 
             return paramList;
         }
@@ -227,6 +236,28 @@ namespace TRLang.src.Parser
 
         private AstNode FunctionDeclStatement() => this.FunctionDecl();
 
+        private AstNode FunctionCallStatement()
+        {
+            Token token = this._currentToken;
+            string funcName = ((StringTokenValue)token.Value).Value;
+            this.Eat(TokenType.Id);
+
+            this.Eat(TokenType.LRound);
+
+            List<AstNode> actualParams = new List<AstNode>();
+            if (!this._currentToken.IsType(TokenType.RRound)) actualParams.Add(this.Expr());
+
+            while (this._currentToken.IsType(TokenType.Comma))
+            {
+                this.Eat(TokenType.Comma);
+                actualParams.Add(this.Expr());
+            }
+
+            this.Eat(TokenType.RRound);
+
+            return new FuncCall(funcName, actualParams, token);
+        }
+
         private List<AstNode> StatementList()
         {
             List<AstNode> statements = new List<AstNode> { this.Statement() };
@@ -254,14 +285,16 @@ namespace TRLang.src.Parser
 
         private AstNode Statement()
         {
-            return this._currentToken.Type switch
+            switch (this._currentToken.Type)
             {
-                TokenType.LCurly => this.CompoundStatement(),
-                TokenType.Id => this.VariableAssignmentStatement(),
-                TokenType.Var => this.VariableDeclStatement(),
-                TokenType.Func => this.FunctionDeclStatement(),
-                _ => this.Empty()
-            };
+                case TokenType.LCurly: return this.CompoundStatement();
+                case TokenType.Id:
+                    if (this._lexer.CurrentChar == '(') return this.FunctionCallStatement();
+                    else return this.VariableAssignmentStatement();
+                case TokenType.Var: return this.VariableDeclStatement();
+                case TokenType.Func: return this.FunctionDeclStatement();
+                default: return this.Empty();
+            }
         }
 
         private AstNode Program()
@@ -277,7 +310,7 @@ namespace TRLang.src.Parser
             throw new ParserError($"{err} caused by {token}" + (details != null ? $" ({details})" : String.Empty));
         }
 
-        private void Log(string message)
+        private static void Log(string message)
         {
             if (Flags.LogParser) Console.WriteLine($"Parser: {message}");
         }

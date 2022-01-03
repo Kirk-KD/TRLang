@@ -22,6 +22,7 @@ namespace TRLang.src
                 case TypeSpec node: return this.Visit(node);
                 case VarDecl node: return this.Visit(node);
                 case FuncDecl node: return this.Visit(node);
+                case FuncCall node: return this.Visit(node);
                 case Program node: return this.Visit(node);
 
                 default: throw new Exception($"No Visit method for AstNode {astNode.GetTypeName()}.");
@@ -51,6 +52,8 @@ namespace TRLang.src
         protected abstract T Visit(VarDecl node);
 
         protected abstract T Visit(FuncDecl node);
+
+        protected abstract T Visit(FuncCall node);
 
         protected abstract T Visit(Program node);
     }

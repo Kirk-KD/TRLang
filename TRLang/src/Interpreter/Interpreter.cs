@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using TRLang.src.Parser.AbstractSyntaxTree;
+using TRLang.src.CallStack;
 
 namespace TRLang.src.Interpreter
 {
     class Interpreter : AstNodeVisitor<InterpreterVisitResult>
     {
         private readonly AstNode RootNode;
-        public Dictionary<string, object> GlobalMemory { get; private set; } = new Dictionary<string, object>();
+        public readonly CallStack.CallStack CallStack = new CallStack.CallStack();
 
         public Interpreter(AstNode node)
         {
@@ -16,7 +16,7 @@ namespace TRLang.src.Interpreter
 
         public InterpreterVisitResult Interpret() => this.GenericVisit(this.RootNode);
 
-        protected override void BeforeVisit(AstNode node) => this.Log($"Visit: {node.GetTypeName()}");
+        protected override void BeforeVisit(AstNode node) => Log($"Visit: {node.GetTypeName()}");
 
         protected override InterpreterVisitResult Visit(Int node) => new InterpreterVisitResult(node.Value);
 
@@ -42,7 +42,7 @@ namespace TRLang.src.Interpreter
                     case Lexer.TokenType.Mul: return new InterpreterVisitResult(left * right);
                     case Lexer.TokenType.Div: return new InterpreterVisitResult(left / right);
 
-                    default: this.Error(); return new InterpreterVisitResult();
+                    default: Error(); return new InterpreterVisitResult();
                 }
             }
             else
@@ -58,7 +58,7 @@ namespace TRLang.src.Interpreter
                     case Lexer.TokenType.Mul: return new InterpreterVisitResult(left * right);
                     case Lexer.TokenType.Div: return new InterpreterVisitResult(left / right);
 
-                    default: this.Error(); return new InterpreterVisitResult();
+                    default: Error(); return new InterpreterVisitResult();
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace TRLang.src.Interpreter
                         new InterpreterVisitResult((float)exprResult.FloatValue) :
                         new InterpreterVisitResult((int)exprResult.IntValue);
 
-                default: this.Error(); return new InterpreterVisitResult();
+                default: Error(); return new InterpreterVisitResult();
             }
         }
 
@@ -96,21 +96,24 @@ namespace TRLang.src.Interpreter
             string key = ((Var)node.LeftNode).Name;
             InterpreterVisitResult result = this.GenericVisit(node.RightNode);
 
-            this.GlobalMemory[key] = result.HasValue(result.FloatValue) ? (float)result.FloatValue : (int)result.IntValue;
+            ActivationRecord ar = this.CallStack.Peek();
+            ar.Set(key, result.HasValue(result.FloatValue) ? (float)result.FloatValue : (int)result.IntValue);
 
             return new InterpreterVisitResult();
         }
 
         protected override InterpreterVisitResult Visit(Var node)
         {
-            if (this.GlobalMemory.ContainsKey(node.Name))
+            ActivationRecord ar = this.CallStack.Peek();
+
+            if (ar.ContainsKey(node.Name))
             {
-                if (this.GlobalMemory[node.Name] is int value) return new InterpreterVisitResult(value);
-                else return new InterpreterVisitResult((float)this.GlobalMemory[node.Name]);
+                if (ar.Get(node.Name) is int value) return new InterpreterVisitResult(value);
+                else return new InterpreterVisitResult((float)ar.Get(node.Name));
             }
             else
             {
-                this.Error();
+                Error();
                 return new InterpreterVisitResult();
             }
         }
@@ -124,7 +127,8 @@ namespace TRLang.src.Interpreter
                 string key = ((Var)node.VarNode).Name;
                 InterpreterVisitResult result = this.GenericVisit(node.ValueNode);
 
-                this.GlobalMemory[key] = result.HasValue(result.FloatValue) ? (float)result.FloatValue : (int)result.IntValue;
+                ActivationRecord ar = this.CallStack.Peek();
+                ar.Set(key, result.HasValue(result.FloatValue) ? (float)result.FloatValue : (int)result.IntValue);
             }
 
             return new InterpreterVisitResult();
@@ -132,19 +136,28 @@ namespace TRLang.src.Interpreter
 
         protected override InterpreterVisitResult Visit(FuncDecl node) => new InterpreterVisitResult();
 
+        protected override InterpreterVisitResult Visit(FuncCall node) => new InterpreterVisitResult();
+
         protected override InterpreterVisitResult Visit(Program node)
         {
+            ActivationRecord ar = new ActivationRecord("<GLOBAL>", ARType.Program, 1);
+            this.CallStack.Push(ar);
+
             foreach (AstNode n in node.Nodes) this.GenericVisit(n);
+
+            if (Flags.LogCallStack) Console.WriteLine(this.CallStack);
+
+            this.CallStack.Pop();
 
             return new InterpreterVisitResult();
         }
 
-        private void Error()
+        private static void Error()
         {
             throw new Exception("ERROR IN INTERPRETER SHOULD NOT BE POSSIBLE.");
         }
 
-        private void Log(string message)
+        private static void Log(string message)
         {
             if (Flags.LogInterpreter) Console.WriteLine($"Interpreter: {message}");
         }

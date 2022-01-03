@@ -22,18 +22,18 @@ namespace TRLang.src
             ScopedSymbolTable builtinsScope = new ScopedSymbolTable("<BUILTINS>", 0);
             builtinsScope.InitBuiltins();
 
-            this.LogEnterScope(builtinsScope);
+            LogEnterScope(builtinsScope);
             this.CurrentScope = builtinsScope;
 
             this.GenericVisit(this.RootNode);
 
-            this.LogLeaveScope(this.CurrentScope);
+            LogLeaveScope(this.CurrentScope);
             this.CurrentScope = this.CurrentScope.EnclosingScope;
         }
 
         protected override void BeforeVisit(AstNode node)
         {
-            this.Log($"Visit: {node}");
+            Log($"Visit: {node}");
         }
 
         protected override Void Visit(Int node) => new Void();
@@ -75,7 +75,7 @@ namespace TRLang.src
         protected override Void Visit(Var node)
         {
             if (this.CurrentScope.Lookup(node.Name) == null)
-                this.Error(ErrorCode.IdNotFound, node.Token);
+                Error(ErrorCode.IdNotFound, node.Token);
 
             return new Void();
         }
@@ -89,7 +89,7 @@ namespace TRLang.src
             string varName = ((Var)node.VarNode).Name;
 
             if (this.CurrentScope.Lookup(varName, curr_scope_only: true) != null)
-                this.Error(ErrorCode.DuplicateId, ((Var)node.VarNode).Token);
+                Error(ErrorCode.DuplicateId, ((Var)node.VarNode).Token);
 
             VarSymbol varSymbol = new VarSymbol(varName, typeSymbol);
             this.CurrentScope.Insert(varSymbol);
@@ -106,7 +106,7 @@ namespace TRLang.src
 
             ScopedSymbolTable funcScope = new ScopedSymbolTable(node.FuncName, this.CurrentScope.ScopeLevel + 1, this.CurrentScope);
 
-            this.LogEnterScope(funcScope);
+            LogEnterScope(funcScope);
             this.CurrentScope = funcScope;
 
             foreach (AstNode n in node.Params)
@@ -123,8 +123,18 @@ namespace TRLang.src
 
             this.GenericVisit(node.BodyNode);
 
-            this.LogLeaveScope(funcScope);
+            LogLeaveScope(funcScope);
             this.CurrentScope = this.CurrentScope.EnclosingScope;
+
+            return new Void();
+        }
+
+        protected override Void Visit(FuncCall node)
+        {
+            if (node.ActualParams.Count != ((FuncSymbol)this.CurrentScope.Lookup(node.FuncName)).Params.Count)
+                Error(ErrorCode.IncorrectParamsCount, node.Token);
+
+            foreach (AstNode paramNode in node.ActualParams) this.GenericVisit(paramNode);
 
             return new Void();
         }
@@ -133,34 +143,34 @@ namespace TRLang.src
         {
             ScopedSymbolTable globalScope = new ScopedSymbolTable("<GLOBAL>", 1, this.CurrentScope); // this.CurrentScope is the builtins scope.
 
-            this.LogEnterScope(globalScope);
+            LogEnterScope(globalScope);
             this.CurrentScope = globalScope;
 
             foreach (AstNode n in node.Nodes) this.GenericVisit(n);
 
-            this.LogLeaveScope(this.CurrentScope);
+            LogLeaveScope(this.CurrentScope);
             this.CurrentScope = this.CurrentScope.EnclosingScope;
 
             return new Void();
         }
 
-        private void LogLeaveScope(ScopedSymbolTable scope)
+        private static void LogLeaveScope(ScopedSymbolTable scope)
         {
             if (Flags.LogSymbolTables) Console.WriteLine(scope);
-            this.Log($"Leave Scope: {scope.ScopeName}, Level={scope.ScopeLevel}");
+            Log($"Leave Scope: {scope.ScopeName}, Level={scope.ScopeLevel}");
         }
 
-        private void LogEnterScope(ScopedSymbolTable scope)
+        private static void LogEnterScope(ScopedSymbolTable scope)
         {
-            this.Log($"Enter Scope: {scope.ScopeName}, Level={scope.ScopeLevel}");
+            Log($"Enter Scope: {scope.ScopeName}, Level={scope.ScopeLevel}");
         }
 
-        private void Error(ErrorCode err, Token token)
+        private static void Error(ErrorCode err, Token token)
         {
             throw new SemanticError($"{err} caused by {token}");
         }
 
-        private void Log(string message)
+        private static void Log(string message)
         {
             if (Flags.LogSemanticAnalyser) Console.WriteLine($"SemanticAnalyser: {message}");
         }

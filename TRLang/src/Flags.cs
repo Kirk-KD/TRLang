@@ -8,13 +8,14 @@
         public static bool LogInterpreter { get; private set; }
         public static bool LogSemanticAnalyser { get; private set; }
         public static bool LogSymbolTables { get; private set; }
+        public static bool LogCallStack { get; private set; }
 
         public static bool PauseAfterExecuting { get; private set; }
         public static bool ShowInnerStacktrace { get; private set; }
 
         public static void InitFlags
         (
-            bool all, bool lexer, bool parser, bool interpreter, bool semantic, bool symtab,
+            bool all, bool lexer, bool parser, bool interpreter, bool semantic, bool symtab, bool stack,
             bool pause, bool trace
         )
         {
@@ -24,6 +25,7 @@
             LogInterpreter = interpreter || all;
             LogSemanticAnalyser = semantic || all;
             LogSymbolTables = symtab || all;
+            LogCallStack = stack || all;
 
             PauseAfterExecuting = pause;
             ShowInnerStacktrace = trace;

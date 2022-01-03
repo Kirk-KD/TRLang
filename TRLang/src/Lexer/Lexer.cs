@@ -13,6 +13,18 @@ namespace TRLang.src.Lexer
         private int _column = 1;
         private char _currentChar;
 
+        public char CurrentChar
+        {
+            get
+            {
+                return this._currentChar;
+            }
+            private set
+            {
+                this._currentChar = value;
+            }
+        }
+
         private static readonly Dictionary<string, TokenType> ReservedKeywords = new Dictionary<string, TokenType>
         {
             // Reserved Keywords
@@ -28,14 +40,14 @@ namespace TRLang.src.Lexer
         public Lexer(string text)
         {
             this._text = text;
-            this._currentChar = this._pos < this._text.Length ? this._text[this._pos] : Char.MinValue;
+            this.CurrentChar = this._pos < this._text.Length ? this._text[this._pos] : Char.MinValue;
 
-            this.Log($"Character: '{this._currentChar}' at {this._line}:{this._column}");
+            Log($"Character: '{this.CurrentChar}' at {this._line}:{this._column}");
         }
 
         private void Advance()
         {
-            if (this._currentChar == '\n')
+            if (this.CurrentChar == '\n')
             {
                 this._line++;
                 this._column = 0;
@@ -45,12 +57,12 @@ namespace TRLang.src.Lexer
 
             if (this._pos < this._text.Length)
             {
-                this._currentChar = this._text[this._pos];
+                this.CurrentChar = this._text[this._pos];
                 this._column++;
             }
-            else this._currentChar = Char.MinValue;
+            else this.CurrentChar = Char.MinValue;
 
-            this.Log($"Character: '{Utilities.SmartCharToString(this._currentChar)}' at {this._line}:{this._column}");
+            Log($"Character: '{Utilities.SmartCharToString(this.CurrentChar)}' at {this._line}:{this._column}");
         }
 
         private void SkipComment()
@@ -108,23 +120,23 @@ namespace TRLang.src.Lexer
 
         public Token GetNextToken()
         {
-            while (this._currentChar != Char.MinValue)
+            while (this.CurrentChar != Char.MinValue)
             {
-                if (Char.IsWhiteSpace(this._currentChar))
+                if (Char.IsWhiteSpace(this.CurrentChar))
                 {
                     this.SkipWhitespace();
                     continue;
                 }
-                else if (this._currentChar == '#')
+                else if (this.CurrentChar == '#')
                 {
                     this.Advance();
                     this.SkipComment();
                     continue;
                 }
-                else if (Char.IsDigit(this._currentChar)) return this.MakeNumber();
-                else if (Char.IsLetter(this._currentChar)) return this.MakeId();
+                else if (Char.IsDigit(this.CurrentChar)) return this.MakeNumber();
+                else if (Char.IsLetter(this.CurrentChar)) return this.MakeId();
 
-                char currentChar = this._currentChar;
+                char currentChar = this.CurrentChar;
                 this.Advance();
 
                 TokenType type = currentChar switch
@@ -155,10 +167,10 @@ namespace TRLang.src.Lexer
 
         private void Error()
         {
-            throw new LexerError($"Unexpected character '{this._currentChar}' at line {this._line}, column {this._column}");
+            throw new LexerError($"Unexpected character '{this.CurrentChar}' at line {this._line}, column {this._column}");
         }
 
-        private void Log(string message)
+        private static void Log(string message)
         {
             if (Flags.LogLexer) Console.WriteLine($"Lexer: {message}");
         }

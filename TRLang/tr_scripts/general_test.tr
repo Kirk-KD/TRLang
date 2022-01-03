@@ -6,6 +6,8 @@ func myFunction(number: int)
 {
 	var weight: float = number;  # kg
 	var a: float = 0.11;
-}
+};
+
+myFunction(10);
 
 # var error_maker: int = 1 + this_variable_doesnt_exist;

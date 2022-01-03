@@ -23,12 +23,12 @@ namespace TRLang
             // Set flags
             Flags.InitFlags
             (
-                options.LogAll, options.LogLexer, options.LogParser, options.LogInterpreter, options.LogSemanticAnalyser, options.LogSymbolTables,
+                options.LogAll, options.LogLexer, options.LogParser, options.LogInterpreter, options.LogSemanticAnalyser, options.LogSymbolTables, options.LogCallStack,
                 options.PauseAfterExecuting, options.ShowInnerStacktrace
             );
 
             // Get code to execute
-            string text = "";
+            string text = String.Empty;
 
             string cmdLineCode = options.Code;
             string filePath = options.Path;
@@ -82,12 +82,6 @@ namespace TRLang
 
             Interpreter interpreter = new Interpreter(parserResult);
             interpreter.Interpret();
-
-            Console.WriteLine("GlobalMemory Contents:");
-            foreach (KeyValuePair<string, object> entry in interpreter.GlobalMemory)
-            {
-                Console.WriteLine($"  {entry.Key} = {entry.Value}");
-            }
         }
     }
 }
