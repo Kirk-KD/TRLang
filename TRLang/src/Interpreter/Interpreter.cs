@@ -1,6 +1,8 @@
 ﻿using System;
 using TRLang.src.Parser.AbstractSyntaxTree;
 using TRLang.src.CallStack;
+using TRLang.src.SymbolTable.Symbols;
+using System.Collections.Generic;
 
 namespace TRLang.src.Interpreter
 {
@@ -136,7 +138,36 @@ namespace TRLang.src.Interpreter
 
         protected override InterpreterVisitResult Visit(FuncDecl node) => new InterpreterVisitResult();
 
-        protected override InterpreterVisitResult Visit(FuncCall node) => new InterpreterVisitResult();
+        protected override InterpreterVisitResult Visit(FuncCall node)
+        {
+            string funcName = node.FuncName;
+
+            ActivationRecord ar = new ActivationRecord(funcName, ARType.Function, 2);
+
+            FuncSymbol funcSymbol = node.FuncSymbol;
+
+            List<VarSymbol> formal = funcSymbol.Params;
+            List<AstNode> actual = node.ActualParams;
+
+            for (int i = 0; i < formal.Count; i++)
+            {
+                InterpreterVisitResult result = this.GenericVisit(actual[i]);
+
+                if (result.HasValue(result.IntValue)) ar.Set(formal[i].Name, result.IntValue);
+                else if (result.HasValue(result.FloatValue)) ar.Set(formal[i].Name, result.FloatValue);
+                else Error();
+            }
+
+            this.CallStack.Push(ar);
+
+            this.GenericVisit(funcSymbol.Body);
+
+            this.LogCallStack();
+
+            this.CallStack.Pop();
+
+            return new InterpreterVisitResult();
+        }
 
         protected override InterpreterVisitResult Visit(Program node)
         {
@@ -145,7 +176,7 @@ namespace TRLang.src.Interpreter
 
             foreach (AstNode n in node.Nodes) this.GenericVisit(n);
 
-            if (Flags.LogCallStack) Console.WriteLine(this.CallStack);
+            this.LogCallStack();
 
             this.CallStack.Pop();
 
@@ -160,6 +191,11 @@ namespace TRLang.src.Interpreter
         private static void Log(string message)
         {
             if (Flags.LogInterpreter) Console.WriteLine($"Interpreter: {message}");
+        }
+
+        private void LogCallStack()
+        {
+            if (Flags.LogCallStack) Console.WriteLine(this.CallStack);
         }
     }
 }

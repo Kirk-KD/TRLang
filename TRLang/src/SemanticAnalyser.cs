@@ -102,6 +102,7 @@ namespace TRLang.src
         protected override Void Visit(FuncDecl node)
         {
             FuncSymbol funcSymbol = new FuncSymbol(node.FuncName);
+            funcSymbol.SetBody(node.BodyNode);
             this.CurrentScope.Insert(funcSymbol);
 
             ScopedSymbolTable funcScope = new ScopedSymbolTable(node.FuncName, this.CurrentScope.ScopeLevel + 1, this.CurrentScope);
@@ -135,6 +136,8 @@ namespace TRLang.src
                 Error(ErrorCode.IncorrectParamsCount, node.Token);
 
             foreach (AstNode paramNode in node.ActualParams) this.GenericVisit(paramNode);
+
+            node.SetFuncSymbol((FuncSymbol)this.CurrentScope.Lookup(node.FuncName));
 
             return new Void();
         }

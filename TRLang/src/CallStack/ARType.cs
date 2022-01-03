@@ -2,6 +2,7 @@
 {
     enum ARType
     {
-        Program
+        Program,
+        Function
     }
 }
