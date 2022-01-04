@@ -34,7 +34,7 @@ namespace TRLang.src.CallStack
         public string GetContents()
         {
             string res = $"{this} contents:";
-            foreach (KeyValuePair<string, object> entry in this._members) res += $"\n  {entry.Key} = {entry.Value}";
+            foreach (KeyValuePair<string, object> entry in this._members) res += $"\n  {entry.Key} = {entry.Value} ({entry.Value.GetType()})";
             return res;
         }
     }

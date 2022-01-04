@@ -11,6 +11,7 @@ namespace TRLang.src.Parser
     {
         private readonly Lexer.Lexer _lexer;
         private Token _currentToken;
+        private Token _prevToken = null;
 
         public Parser(Lexer.Lexer lexer)
         {
@@ -22,7 +23,11 @@ namespace TRLang.src.Parser
         {
             Log($"TokenExpectation: Expected={tokenType}, Actual={this._currentToken.Type}");
 
-            if (this._currentToken.IsType(tokenType)) this._currentToken = this._lexer.GetNextToken();
+            if (this._currentToken.IsType(tokenType))
+            {
+                this._prevToken = this._currentToken.Clone();
+                this._currentToken = this._lexer.GetNextToken();
+            }
             else this.Error(ErrorCode.UnexpectedToken, this._currentToken, $"Expected a token of type {tokenType}");
         }
 
@@ -262,9 +267,9 @@ namespace TRLang.src.Parser
         {
             List<AstNode> statements = new List<AstNode> { this.Statement() };
 
-            while (this._currentToken.IsType(TokenType.Semi))
+            while (this._currentToken.IsType(TokenType.Semi) || this._prevToken.IsType(TokenType.RCurly))
             {
-                this.Eat(TokenType.Semi);
+                if (this._currentToken.IsType(TokenType.Semi)) this.Eat(TokenType.Semi); // Get next token only if the current token is a Semi
                 statements.Add(this.Statement());
             }
 
