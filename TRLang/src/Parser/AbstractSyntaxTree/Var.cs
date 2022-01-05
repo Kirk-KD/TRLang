@@ -3,7 +3,7 @@ using TRLang.src.Lexer.TokenValue;
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class Var : AstNode
+    public class Var : AstNode
     {
         public string Name { get; private set; }
         public Token Token { get; private set; }

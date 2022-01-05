@@ -1,0 +1,22 @@
+# function definitions
+func Function1() {}
+
+func Function2() {
+	var x: int = 1;
+}
+
+func Function3(arg_1: int) {}
+
+func Function4(arg_1: int, arg_2: float) {}
+
+func Function5(arg_1: int, arg_2: float, arg_3: int) {}
+
+func Function6(a: int, b: int, c: int, d: int, e: int, f: int, g: int, h: int, i: int, j: int) {}
+
+# function calls
+Function1();
+Function2();
+Function3(1);
+Function4(1, 2.5);
+Function5(1, 2.5, 3);
+Function6(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);

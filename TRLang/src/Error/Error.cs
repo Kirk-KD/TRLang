@@ -2,7 +2,7 @@
 
 namespace TRLang.src.Error
 {
-    class Error : Exception
+    public class Error : Exception
     {
         public override string Message { get; }
 

@@ -2,7 +2,7 @@
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class UnaryOp : AstNode
+    public class UnaryOp : AstNode
     {
         public Token Op { get; private set; }
         public AstNode ExprNode { get; private set; }

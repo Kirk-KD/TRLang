@@ -1,8 +1,6 @@
 ﻿using CommandLine;
 using System;
-using System.Collections.Generic;
 using TRLang.src;
-using TRLang.src.Interpreter;
 using TRLang.src.Lexer;
 using TRLang.src.Parser.AbstractSyntaxTree;
 using Error = TRLang.src.Error.Error;
@@ -10,7 +8,7 @@ using Parser = TRLang.src.Parser.Parser;
 
 namespace TRLang
 {
-    class TRLang
+    internal class TRLang
     {
         static void Main(string[] args)
         {
@@ -54,20 +52,17 @@ namespace TRLang
             }
             else if (cmdLineCode != null) text = cmdLineCode;
 
-            if (text.Length != 0)
+            try
             {
-                try
-                {
-                    Execute(text);
-                }
-                catch (Error e)
-                {
-                    Console.WriteLine($"[!] {e.Message}");
-                    if (Flags.ShowInnerStacktrace) Console.WriteLine($"[!] Actual Trace:\n[!] {e.StackTrace.Replace("\n", "\n[!] ")}");
-                }
-
-                if (Flags.PauseAfterExecuting) Console.ReadKey();
+                Execute(text);
             }
+            catch (Error e)
+            {
+                Console.WriteLine($"[!] {e.Message}");
+                if (Flags.ShowInnerStacktrace) Console.WriteLine($"[!] Actual Trace:\n[!] {e.StackTrace.Replace("\n", "\n[!] ")}");
+            }
+
+            if (Flags.PauseAfterExecuting) Console.ReadKey();
         }
 
         private static void Execute(string text)

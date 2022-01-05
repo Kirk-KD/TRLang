@@ -5,7 +5,7 @@ using TRLang.src.SymbolTable.Symbols;
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class FuncCall : AstNode
+    public class FuncCall : AstNode
     {
         public string FuncName { get; private set; }
         public List<AstNode> ActualParams { get; private set; }

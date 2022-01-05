@@ -5,7 +5,7 @@ using TRLang.src.Lexer.TokenValue;
 
 namespace TRLang.src.Lexer
 {
-    class Lexer
+    public class Lexer
     {
         private readonly string _text;
         private int _pos = 0;

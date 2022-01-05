@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TRLang.src.CallStack
 {
-    class ActivationRecord
+    public class ActivationRecord
     {
         public string Name { get; private set; }
         public ARType Type { get; private set; }

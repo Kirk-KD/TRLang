@@ -4,7 +4,7 @@ using TRLang.src.Parser.AbstractSyntaxTree;
 
 namespace TRLang.src.SymbolTable.Symbols
 {
-    class FuncSymbol : Symbol
+    public class FuncSymbol : Symbol
     {
         public List<VarSymbol> Params { get; private set; }
         public AstNode Body { get; private set; }

@@ -5,12 +5,13 @@ using TRLang.src.SymbolTable.Symbols;
 using System.Collections.Generic;
 using TRLang.src.Lexer;
 
-namespace TRLang.src.Interpreter
+namespace TRLang.src
 {
-    class Interpreter : AstNodeVisitor<object>
+    public class Interpreter : AstNodeVisitor<object>
     {
         private readonly AstNode RootNode;
         public readonly CallStack.CallStack CallStack = new CallStack.CallStack();
+        public readonly List<ActivationRecord> ArHistory = new List<ActivationRecord>();
 
         public Interpreter(AstNode node)
         {
@@ -27,52 +28,12 @@ namespace TRLang.src.Interpreter
 
         protected override object Visit(BinOp node)
         {
-            //object leftResult = this.GenericVisit(node.LeftNode);
-            //object rightResult = this.GenericVisit(node.RightNode);
-
-            //bool returnFloat = leftResult.HasValue(leftResult.FloatValue) || rightResult.HasValue(rightResult.FloatValue);
-
-            //if (returnFloat)
-            //{
-            //    // Convert value to float
-            //    float left = (node.LeftNode is Int) ? ((Int)node.LeftNode).Value : ((Float)node.LeftNode).Value;
-            //    float right = (node.RightNode is Int) ? ((Int)node.RightNode).Value : ((Float)node.RightNode).Value;
-
-            //    switch (node.Op.Type)
-            //    {
-            //        case Lexer.TokenType.Plus: return new InterpreterVisitResult(left + right);
-            //        case Lexer.TokenType.Minus: return new InterpreterVisitResult(left - right);
-            //        case Lexer.TokenType.Mul: return new InterpreterVisitResult(left * right);
-            //        case Lexer.TokenType.Div: return new InterpreterVisitResult(left / right);
-
-            //        default: Error(); return new InterpreterVisitResult();
-            //    }
-            //}
-            //else
-            //{
-            //    // Convert value to int
-            //    int left = ((Int)node.LeftNode).Value;
-            //    int right = ((Int)node.RightNode).Value;
-
-            //    switch (node.Op.Type)
-            //    {
-            //        case Lexer.TokenType.Plus: return new InterpreterVisitResult(left + right);
-            //        case Lexer.TokenType.Minus: return new InterpreterVisitResult(left - right);
-            //        case Lexer.TokenType.Mul: return new InterpreterVisitResult(left * right);
-            //        case Lexer.TokenType.Div: return new InterpreterVisitResult(left / right);
-
-            //        default: Error(); return new InterpreterVisitResult();
-            //    }
-            //}
-
             object leftResult = this.GenericVisit(node.LeftNode);
             object rightResult = this.GenericVisit(node.RightNode);
 
             bool leftIsInt = leftResult is int;
             bool rightIsInt = rightResult is int;
 
-            //object left = leftIsInt ? (int)leftResult : (float)leftResult;
-            //object right = rightIsInt ? (int)rightResult : (float)rightResult;
             int? intLeft = leftIsInt ? (int)leftResult : null;
             float? floatLeft = !leftIsInt ? (float)leftResult : null;
             int? intRight = rightIsInt ? (int)rightResult : null;
@@ -94,7 +55,10 @@ namespace TRLang.src.Interpreter
                 return null;
             }
 
-            if (leftIsInt && rightIsInt) return Convert.ToInt32(result!);
+            if (leftIsInt && rightIsInt && !node.Op.IsType(TokenType.Div))
+            {
+                return Convert.ToInt32(result!);
+            }
             else return (result!);
         }
 
@@ -102,13 +66,17 @@ namespace TRLang.src.Interpreter
         {
             object exprResult = this.GenericVisit(node.ExprNode);
 
+            float result;
             switch (node.Op.Type)
             {
-                case TokenType.Minus: return -(exprResult is int ? (int)exprResult : (float)exprResult);
-                case TokenType.Plus: return exprResult is int ? (int)exprResult : (float)exprResult;
+                case TokenType.Minus: result = -Convert.ToSingle(exprResult); break;
+                case TokenType.Plus: result = Convert.ToSingle(exprResult); break;
 
-                default: Error(); return null;
+                default: Error(node.Op.Type.ToString()); return null;
             }
+
+            if (exprResult is int) return Convert.ToInt32(result);
+            else return result;
         }
 
         protected override object Visit(Compound node)
@@ -184,9 +152,9 @@ namespace TRLang.src.Interpreter
 
             this.LogCallStack();
 
-            this.CallStack.Pop();
+            this.ArHistory.Insert(0, this.CallStack.Pop());
 
-            return new InterpreterVisitResult();
+            return null;
         }
 
         protected override object Visit(Program node)
@@ -198,14 +166,14 @@ namespace TRLang.src.Interpreter
 
             this.LogCallStack();
 
-            this.CallStack.Pop();
+            this.ArHistory.Insert(0, this.CallStack.Pop());
 
             return null;
         }
 
-        private static void Error()
+        private static void Error(string details = "No details")
         {
-            throw new Exception("ERROR IN INTERPRETER SHOULD NOT BE POSSIBLE.");
+            throw new Exception($"ERROR IN INTERPRETER SHOULD NOT BE POSSIBLE ({details})");
         }
 
         private static void Log(string message)

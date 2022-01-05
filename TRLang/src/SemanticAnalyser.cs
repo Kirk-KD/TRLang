@@ -7,7 +7,7 @@ using TRLang.src.SymbolTable.Symbols;
 
 namespace TRLang.src
 {
-    class SemanticAnalyser : AstNodeVisitor<Void>
+    public class SemanticAnalyser : AstNodeVisitor<Void>
     {
         public ScopedSymbolTable CurrentScope { get; private set; }
         public AstNode RootNode { get; private set; }

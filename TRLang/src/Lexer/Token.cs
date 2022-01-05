@@ -2,7 +2,7 @@
 
 namespace TRLang.src.Lexer
 {
-    class Token
+    public class Token
     {
         public TokenType Type { get; private set; }
         public TokenValue.TokenValue Value { get; private set; }

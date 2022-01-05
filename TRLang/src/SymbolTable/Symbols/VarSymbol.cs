@@ -1,6 +1,6 @@
 ﻿namespace TRLang.src.SymbolTable.Symbols
 {
-    class VarSymbol : Symbol
+    public class VarSymbol : Symbol
     {
         public BuiltinTypeSymbol Type { get; private set; }
 

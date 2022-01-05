@@ -3,7 +3,7 @@ using TRLang.src.Parser.AbstractSyntaxTree;
 
 namespace TRLang.src
 {
-    abstract class AstNodeVisitor<T>
+    public abstract class AstNodeVisitor<T>
     {
         protected T GenericVisit(AstNode astNode)
         {

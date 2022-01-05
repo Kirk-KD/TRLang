@@ -1,6 +1,6 @@
 ﻿namespace TRLang.src.CallStack
 {
-    enum ARType
+    public enum ARType
     {
         Program,
         Function

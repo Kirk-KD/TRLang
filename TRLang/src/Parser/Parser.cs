@@ -7,11 +7,11 @@ using TRLang.src.Parser.AbstractSyntaxTree;
 
 namespace TRLang.src.Parser
 {
-    class Parser
+    public class Parser
     {
         private readonly Lexer.Lexer _lexer;
         private Token _currentToken;
-        private Token _prevToken = null;
+        private Token _prevToken = new Token();
 
         public Parser(Lexer.Lexer lexer)
         {
@@ -75,12 +75,12 @@ namespace TRLang.src.Parser
             switch (this._currentToken.Type)
             {
                 case TokenType.Int:
-                    Int intNode = new Int(_currentToken);
+                    Int intNode = new Int(this._currentToken);
                     this.Eat(TokenType.Int);
                     return intNode;
 
                 case TokenType.Float:
-                    Float floatNode = new Float(_currentToken);
+                    Float floatNode = new Float(this._currentToken);
                     this.Eat(TokenType.Float);
                     return floatNode;
 
@@ -92,12 +92,14 @@ namespace TRLang.src.Parser
                     return node;
 
                 case TokenType.Plus:
+                    Token tokenPlus = this._currentToken;
                     this.Eat(TokenType.Plus);
-                    return new UnaryOp(this._currentToken, this.Factor());
+                    return new UnaryOp(tokenPlus, this.Factor());
 
                 case TokenType.Minus:
+                    Token tokenMinus = this._currentToken;
                     this.Eat(TokenType.Minus);
-                    return new UnaryOp(this._currentToken, this.Factor());
+                    return new UnaryOp(tokenMinus, this.Factor());
 
                 default: return this.Variable();
             }

@@ -2,7 +2,7 @@
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class BinOp : AstNode
+    public class BinOp : AstNode
     {
         public AstNode LeftNode { get; private set; }
         public Token Op { get; private set; }

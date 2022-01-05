@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TRLang.src.CallStack
 {
-    class CallStack
+    public class CallStack
     {
         private readonly List<ActivationRecord> _records = new List<ActivationRecord>();
 

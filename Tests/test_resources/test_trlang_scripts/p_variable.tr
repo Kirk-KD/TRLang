@@ -1,0 +1,23 @@
+﻿# basic definitions
+var int_1: int = 1;
+
+var float_1: float = 1.0;
+var float_2: float = 1.1;
+var float_3: float = 1.10;
+
+var float_zero: float = 0.0;
+var int_zero: int = 0;
+
+var float_neg_1: float = -1.0;
+var float_neg_2: float = -1.1;
+var float_neg_3: float = -1.10;
+
+# reassignments
+int_1 = 10;
+float_1 = 10.3;
+float_neg_3 = 20.000;
+
+# accessing variables
+var variable_1: int = int_1;
+var variable_2: int = 24 + int_1;
+var variable_3: float = float_1 - float_neg_2;

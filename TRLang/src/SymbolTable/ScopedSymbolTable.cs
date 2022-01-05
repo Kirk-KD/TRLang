@@ -4,7 +4,7 @@ using TRLang.src.SymbolTable.Symbols;
 
 namespace TRLang.src.SymbolTable
 {
-    class ScopedSymbolTable
+    public class ScopedSymbolTable
     {
         private readonly Dictionary<string, Symbol> _symbols = new Dictionary<string, Symbol>();
         public string ScopeName { get; private set; }

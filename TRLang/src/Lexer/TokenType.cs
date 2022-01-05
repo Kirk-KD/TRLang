@@ -1,6 +1,6 @@
 ﻿namespace TRLang.src.Lexer
 {
-    enum TokenType
+    public enum TokenType
     {
         Int,
         Float,

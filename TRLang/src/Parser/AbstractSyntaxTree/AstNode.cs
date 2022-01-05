@@ -2,7 +2,7 @@
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    abstract class AstNode
+    public abstract class AstNode
     {
         public abstract override string ToString();
 

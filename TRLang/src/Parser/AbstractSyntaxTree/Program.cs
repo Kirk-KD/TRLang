@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class Program : AstNode
+    public class Program : AstNode
     {
         public List<AstNode> Nodes { get; private set; }
 

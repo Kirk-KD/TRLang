@@ -1,6 +1,6 @@
 ﻿namespace TRLang.src.SymbolTable.Symbols
 {
-    abstract class Symbol
+    public abstract class Symbol
     {
         public string Name { get; private set; }
 

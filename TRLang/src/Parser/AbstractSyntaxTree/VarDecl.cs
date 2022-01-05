@@ -1,6 +1,6 @@
 ﻿namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class VarDecl : AstNode
+    public class VarDecl : AstNode
     {
         public AstNode VarNode { get; private set; }
         public AstNode TypeNode { get; private set; }

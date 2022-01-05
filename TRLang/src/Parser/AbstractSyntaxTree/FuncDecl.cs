@@ -2,7 +2,7 @@
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
-    class FuncDecl : AstNode
+    public class FuncDecl : AstNode
     {
         public string FuncName { get; private set; }
         public List<AstNode> Params { get; private set; }

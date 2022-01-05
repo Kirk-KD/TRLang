@@ -1,6 +1,6 @@
 ﻿namespace TRLang.src.Error
 {
-    enum ErrorCode
+    public enum ErrorCode
     {
         UnexpectedToken,
         IdNotFound,
