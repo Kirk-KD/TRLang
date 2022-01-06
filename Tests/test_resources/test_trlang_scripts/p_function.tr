@@ -7,9 +7,9 @@ func Function2() {
 
 func Function3(arg_1: int) {}
 
-func Function4(arg_1: int, arg_2: float) {}
+func Function4(arg_1: int, arg_2: dbl) {}
 
-func Function5(arg_1: int, arg_2: float, arg_3: int) {}
+func Function5(arg_1: int, arg_2: dbl, arg_3: int) {}
 
 func Function6(a: int, b: int, c: int, d: int, e: int, f: int, g: int, h: int, i: int, j: int) {}
 

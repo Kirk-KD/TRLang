@@ -4,6 +4,7 @@ using TRLang.src.CallStack;
 using TRLang.src.SymbolTable.Symbols;
 using System.Collections.Generic;
 using TRLang.src.Lexer;
+using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
 
 namespace TRLang.src
 {
@@ -24,7 +25,7 @@ namespace TRLang.src
 
         protected override object Visit(Int node) => node.Value;
 
-        protected override object Visit(Float node) => node.Value;
+        protected override object Visit(Double node) => node.Value;
 
         protected override object Visit(BinOp node)
         {
@@ -35,16 +36,16 @@ namespace TRLang.src
             bool rightIsInt = rightResult is int;
 
             int? intLeft = leftIsInt ? (int)leftResult : null;
-            float? floatLeft = !leftIsInt ? (float)leftResult : null;
+            double? dblLeft = !leftIsInt ? (double)leftResult : null;
             int? intRight = rightIsInt ? (int)rightResult : null;
-            float? floatRight = !rightIsInt ? (float)rightResult : null;
+            double? dblRight = !rightIsInt ? (double)rightResult : null;
 
-            float? result = node.Op.Type switch
+            double? result = node.Op.Type switch
             {
-                TokenType.Plus => (intLeft ?? floatLeft) + (intRight ?? floatRight),
-                TokenType.Minus => (intLeft ?? floatLeft) - (intRight ?? floatRight),
-                TokenType.Mul => (intLeft ?? floatLeft) * (intRight ?? floatRight),
-                TokenType.Div => (intLeft ?? floatLeft) / (intRight ?? floatRight),
+                TokenType.Plus => (intLeft ?? dblLeft) + (intRight ?? dblRight),
+                TokenType.Minus => (intLeft ?? dblLeft) - (intRight ?? dblRight),
+                TokenType.Mul => (intLeft ?? dblLeft) * (intRight ?? dblRight),
+                TokenType.Div => (intLeft ?? dblLeft) / (intRight ?? dblRight),
 
                 _ => null
             };
@@ -66,11 +67,11 @@ namespace TRLang.src
         {
             object exprResult = this.GenericVisit(node.ExprNode);
 
-            float result;
+            double result;
             switch (node.Op.Type)
             {
-                case TokenType.Minus: result = -Convert.ToSingle(exprResult); break;
-                case TokenType.Plus: result = Convert.ToSingle(exprResult); break;
+                case TokenType.Minus: result = -Convert.ToDouble(exprResult); break;
+                case TokenType.Plus: result = Convert.ToDouble(exprResult); break;
 
                 default: Error(node.Op.Type.ToString()); return null;
             }

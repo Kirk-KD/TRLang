@@ -3,7 +3,7 @@
     public enum TokenType
     {
         Int,
-        Float,
+        Double,
 
         Plus,
         Minus,
@@ -22,7 +22,7 @@
         Dot,
 
         IntType,
-        FloatType,
+        DoubleType,
 
         Id,
         Eof,
@@ -30,7 +30,6 @@
         Empty,
 
         // Reserved keywords
-        Main,
         Var,
         Func
     }

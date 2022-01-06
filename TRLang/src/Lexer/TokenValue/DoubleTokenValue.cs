@@ -1,10 +1,10 @@
 ﻿namespace TRLang.src.Lexer.TokenValue
 {
-    class FloatTokenValue : TokenValue
+    class DoubleTokenValue : TokenValue
     {
-        public float Value { get; private set; }
+        public double Value { get; private set; }
 
-        public FloatTokenValue(float value)
+        public DoubleTokenValue(double value)
         {
             this.Value = value;
         }

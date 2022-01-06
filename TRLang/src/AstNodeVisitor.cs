@@ -1,5 +1,6 @@
 ﻿using System;
 using TRLang.src.Parser.AbstractSyntaxTree;
+using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
 
 namespace TRLang.src
 {
@@ -12,7 +13,7 @@ namespace TRLang.src
             switch (astNode)
             {
                 case Int node: return this.Visit(node);
-                case Float node: return this.Visit(node);
+                case Double node: return this.Visit(node);
                 case BinOp node: return this.Visit(node);
                 case UnaryOp node: return this.Visit(node);
                 case Compound node: return this.Visit(node);
@@ -33,7 +34,7 @@ namespace TRLang.src
 
         protected abstract T Visit(Int node);
 
-        protected abstract T Visit(Float node);
+        protected abstract T Visit(Double node);
 
         protected abstract T Visit(BinOp node);
 

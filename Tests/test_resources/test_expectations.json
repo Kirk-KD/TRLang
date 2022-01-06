@@ -4,8 +4,8 @@
             "num_1": [ "int", 5 ],
             "num_2": [ "int", -1 ],
             "num_3": [ "int", 6 ],
-            "num_4": [ "float", 0.5 ],
-            "num_5": [ "float", 154 ],
+            "num_4": [ "dbl", 0.5 ],
+            "num_5": [ "dbl", 154 ],
             "num_6": [ "int", 11 ]
         }
     },
@@ -19,11 +19,11 @@
         },
         "Function4": {
             "arg_1": [ "int", 1 ],
-            "arg_2": [ "float", 2.5 ]
+            "arg_2": [ "dbl", 2.5 ]
         },
         "Function5": {
             "arg_1": [ "int", 1 ],
-            "arg_2": [ "float", 2.5 ],
+            "arg_2": [ "dbl", 2.5 ],
             "arg_3": [ "int", 3 ]
         },
         "Function6": {
@@ -37,6 +37,22 @@
             "h": [ "int", 8 ],
             "i": [ "int", 9 ],
             "j": [ "int", 0 ]
+        }
+    },
+    "p_variable": {
+        "<GLOBAL>": {
+            "int_1": [ "int", 10 ],
+            "dbl_1": [ "dbl", 10.3 ],
+            "dbl_2": [ "dbl", 1.1 ],
+            "dbl_3": [ "dbl", 1.1 ],
+            "dbl_zero": [ "dbl", 0 ],
+            "int_zero": [ "int", 0 ],
+            "dbl_neg_1": [ "dbl", -1 ],
+            "dbl_neg_2": [ "dbl", -1.1 ],
+            "dbl_neg_3": [ "dbl", 20 ],
+            "variable_1": [ "int", 10 ],
+            "variable_2": [ "int", 34 ],
+            "variable_3": [ "dbl", 11.4 ]
         }
     }
 }

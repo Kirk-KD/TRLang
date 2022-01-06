@@ -1,7 +1,7 @@
 ﻿var num_1: int = 2 + 3;
 var num_2: int = 2 - 3;
 var num_3: int = 2 * 3;
-var num_4: float = 2 / 4;
+var num_4: dbl = 2 / 4;
 
-var num_5: float = (2 + 3 * (4 + 5) / 2) * 10 - 1; # 154
+var num_5: dbl = (2 + 3 * (4 + 5) / 2) * 10 - 1;   # 154
 var num_6: int = +-+-++---+-10 + 1;                # 11

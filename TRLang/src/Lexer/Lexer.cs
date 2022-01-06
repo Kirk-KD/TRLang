@@ -28,13 +28,12 @@ namespace TRLang.src.Lexer
         private static readonly Dictionary<string, TokenType> ReservedKeywords = new Dictionary<string, TokenType>
         {
             // Reserved Keywords
-            { "main", TokenType.Main },
             { "var", TokenType.Var },
             { "func", TokenType.Func },
 
             // Datatypes
             { "int", TokenType.IntType },
-            { "float", TokenType.FloatType }
+            { "dbl", TokenType.DoubleType }
         };
 
         public Lexer(string text)
@@ -97,7 +96,7 @@ namespace TRLang.src.Lexer
                     this.Advance();
                 }
 
-                return new Token(TokenType.Float, new FloatTokenValue((float)Double.Parse(result)), this._line, this._column);
+                return new Token(TokenType.Double, new DoubleTokenValue(Double.Parse(result)), this._line, this._column);
             }
 
             return new Token(TokenType.Int, new IntTokenValue(Int32.Parse(result)), this._line, this._column);

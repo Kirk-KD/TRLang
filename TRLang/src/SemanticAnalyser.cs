@@ -4,6 +4,7 @@ using TRLang.src.Lexer;
 using TRLang.src.Parser.AbstractSyntaxTree;
 using TRLang.src.SymbolTable;
 using TRLang.src.SymbolTable.Symbols;
+using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
 
 namespace TRLang.src
 {
@@ -38,7 +39,7 @@ namespace TRLang.src
 
         protected override Void Visit(Int node) => new Void();
 
-        protected override Void Visit(Float node) => new Void();
+        protected override Void Visit(Double node) => new Void();
 
         protected override Void Visit(BinOp node)
         {

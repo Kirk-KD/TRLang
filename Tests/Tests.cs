@@ -18,8 +18,8 @@ namespace Tests
         {
             Console.WriteLine("Preparing inputs.");
 
-            string testScriptsPath = @"..\..\..\test_trlang_scripts\";
-            string jsonPath = @"..\..\..\test_expectations.json";
+            string testScriptsPath = @"..\..\..\test_resources\test_trlang_scripts\";
+            string jsonPath = @"..\..\..\test_resources\test_expectations.json";
 
             ExpectedActivationRecords expectedActivationRecords =
                 JsonSerializer.Deserialize<ExpectedActivationRecords>(File.ReadAllText(jsonPath));

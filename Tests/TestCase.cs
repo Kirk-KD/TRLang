@@ -63,7 +63,7 @@ namespace Tests
                         switch (type)
                         {
                             case "int": expected = rawExpected.GetInt32(); break;
-                            case "float": expected = rawExpected.GetSingle(); break;
+                            case "dbl": expected = rawExpected.GetDouble(); break;
 
                             default: throw new Exception($"Invalid type specification \"{type}\"");
                         }

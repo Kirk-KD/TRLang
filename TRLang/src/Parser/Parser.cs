@@ -4,6 +4,7 @@ using TRLang.src.Error;
 using TRLang.src.Lexer;
 using TRLang.src.Lexer.TokenValue;
 using TRLang.src.Parser.AbstractSyntaxTree;
+using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
 
 namespace TRLang.src.Parser
 {
@@ -49,7 +50,7 @@ namespace TRLang.src.Parser
         *                      | func_call_statement
         *                      | empty
         * variable_decl        : type_spec ID (ASSIGN expr)
-        * type_spec            : INT_TYPE | FLOAT_TYPE
+        * type_spec            : INT_TYPE | DOUBLE_TYPE
         * assignment_statement : variable ASSIGN expr
         * var_decl_statement   : var_decl_list
         * var_decl_list        : VAR variable_decl (COMMA variable_decl)*
@@ -64,7 +65,7 @@ namespace TRLang.src.Parser
         * factor               : PLUS factor
         *                      | MINUS factor
         *                      | INT
-        *                      | FLOAT
+        *                      | DOUBLE
         *                      | L_ROUND expr R_ROUND
         *                      | variable
         * variable             : ID
@@ -79,10 +80,10 @@ namespace TRLang.src.Parser
                     this.Eat(TokenType.Int);
                     return intNode;
 
-                case TokenType.Float:
-                    Float floatNode = new Float(this._currentToken);
-                    this.Eat(TokenType.Float);
-                    return floatNode;
+                case TokenType.Double:
+                    Double dblNode = new Double(this._currentToken);
+                    this.Eat(TokenType.Double);
+                    return dblNode;
 
                 case TokenType.LRound:
                     this.Eat(TokenType.LRound);
@@ -140,7 +141,7 @@ namespace TRLang.src.Parser
             Token tok = this._currentToken;
 
             if (this._currentToken.IsType(TokenType.IntType)) this.Eat(TokenType.IntType);
-            else this.Eat(TokenType.FloatType);
+            else this.Eat(TokenType.DoubleType);
 
             return new TypeSpec(tok);
         }
