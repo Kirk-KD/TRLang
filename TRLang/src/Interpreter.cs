@@ -19,7 +19,11 @@ namespace TRLang.src
             this.RootNode = node;
         }
 
-        public object Interpret() => this.GenericVisit(this.RootNode);
+        public object Interpret()
+        {
+            Log("Start interpretation");
+            return this.GenericVisit(this.RootNode);
+        }
 
         protected override void BeforeVisit(AstNode node) => Log($"Visit: {node.GetTypeName()}");
 

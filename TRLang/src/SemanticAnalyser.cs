@@ -20,6 +20,8 @@ namespace TRLang.src
 
         public void Analyse()
         {
+            Log("Start semantic analysis");
+
             ScopedSymbolTable builtinsScope = new ScopedSymbolTable("<BUILTINS>", 0);
             builtinsScope.InitBuiltins();
 

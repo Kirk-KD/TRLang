@@ -34,6 +34,7 @@ namespace TRLang.src.Parser
 
         public AstNode Parse()
         {
+            Log("Start parsing AST");
             return this.Program();
         }
 
@@ -270,9 +271,13 @@ namespace TRLang.src.Parser
         {
             List<AstNode> statements = new List<AstNode> { this.Statement() };
 
-            while (this._currentToken.IsType(TokenType.Semi) || this._prevToken.IsType(TokenType.RCurly))
+            bool passedCurly = false;
+
+            while (this._currentToken.IsType(TokenType.Semi) || (this._prevToken.IsType(TokenType.RCurly) && !passedCurly))
             {
                 if (this._currentToken.IsType(TokenType.Semi)) this.Eat(TokenType.Semi); // Get next token only if the current token is a Semi
+                else passedCurly = true;
+
                 statements.Add(this.Statement());
             }
 
