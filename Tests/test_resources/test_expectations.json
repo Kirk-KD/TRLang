@@ -39,7 +39,10 @@
             "j": [ "int", 0 ]
         },
         "Outer": {
-            "a": [ "int", 0 ] // TODO
+            "a": [ "int", 0 ]
+        },
+        "Inner": {
+            "b": [ "dbl", 0.1 ]
         }
     },
     "p_variable": {

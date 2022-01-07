@@ -58,14 +58,14 @@ namespace TRLang.src.Parser
         *                      | empty
         * variable_decl        : type_spec ID (ASSIGN expr)
         * type_spec            : INT_TYPE | DOUBLE_TYPE
-        * assignment_statement : variable ASSIGN expr
-        * var_decl_statement   : var_decl_list
+        * assignment_statement : variable ASSIGN expr SEMI
+        * var_decl_statement   : var_decl_list SEMI
         * var_decl_list        : VAR variable_decl (COMMA variable_decl)*
         * formal_param         : ID COLON type_spec
         * formal_param_list    : formal_param (COMA formal_param)*
         * function_decl        : FUNC ID LROUND formal_param_list RROUND statement
         * func_decl_statement  : function_decl
-        * func_call_statement  : ID L_ROUND (expr (COMMA expr)*)? R_ROUND
+        * func_call_statement  : ID L_ROUND (expr (COMMA expr)*)? R_ROUND SEMI
         * empty                :
         * expr                 : term ((PLUS | MINUS) term)*
         * term                 : factor ((MUL | DIV) factor)*
@@ -190,6 +190,8 @@ namespace TRLang.src.Parser
             this.Eat(TokenType.Assign);
             AstNode rightNode = this.Expr();
 
+            this.Eat(TokenType.Semi);
+
             return new Assign(leftNode, tok, rightNode);
         }
 
@@ -252,6 +254,8 @@ namespace TRLang.src.Parser
 
             foreach (AstNode node in nodes) root.Children.Add(node);
 
+            this.Eat(TokenType.Semi);
+
             return root;
         }
 
@@ -275,6 +279,7 @@ namespace TRLang.src.Parser
             }
 
             this.Eat(TokenType.RRound);
+            this.Eat(TokenType.Semi);
 
             return new FuncCall(funcName, actualParams, token);
         }
@@ -283,15 +288,7 @@ namespace TRLang.src.Parser
         {
             List<AstNode> statements = new List<AstNode> { this.Statement() };
 
-            bool passedCurly = false;
-
-            while (this._currentToken.IsType(TokenType.Semi) || (this._prevToken.IsType(TokenType.RCurly) && !passedCurly))
-            {
-                if (this._currentToken.IsType(TokenType.Semi)) this.Eat(TokenType.Semi); // Get next token only if the current token is a Semi
-                else passedCurly = true;
-
-                statements.Add(this.Statement());
-            }
+            while (!this._currentToken.IsEndOfStmtList()) statements.Add(this.Statement());
 
             return statements;
         }

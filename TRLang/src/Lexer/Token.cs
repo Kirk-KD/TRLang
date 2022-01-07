@@ -33,6 +33,11 @@ namespace TRLang.src.Lexer
 
         public bool IsType(TokenType type) => this.Type == type;
 
+        public bool IsEndOfStmtList() =>
+            this.IsType(TokenType.Empty) ||
+            this.IsType(TokenType.RCurly) ||
+            this.IsType(TokenType.Eof);
+
         public Token Clone() => new Token(this.Type, this.Value, this.Line, this.Column);
 
         public override string ToString() => $"Token(Type={this.Type}, Value={this.Value}, Position={this.Line}:{this.Column})";
