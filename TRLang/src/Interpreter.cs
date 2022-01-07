@@ -137,10 +137,9 @@ namespace TRLang.src
         protected override object Visit(FuncCall node)
         {
             string funcName = node.FuncName;
-
-            ActivationRecord ar = new ActivationRecord(funcName, ARType.Function, 2);
-
             FuncSymbol funcSymbol = node.FuncSymbol;
+
+            ActivationRecord ar = new ActivationRecord(funcName, ARType.Function, funcSymbol.Level + 1);
 
             List<VarSymbol> formal = funcSymbol.Params;
             List<AstNode> actual = node.ActualParams;

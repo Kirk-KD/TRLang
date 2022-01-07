@@ -37,6 +37,9 @@
             "h": [ "int", 8 ],
             "i": [ "int", 9 ],
             "j": [ "int", 0 ]
+        },
+        "Outer": {
+            "a": [ "int", 0 ] // TODO
         }
     },
     "p_variable": {

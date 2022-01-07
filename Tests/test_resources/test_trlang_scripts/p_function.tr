@@ -20,3 +20,16 @@ Function3(1);
 Function4(1, 2.5);
 Function5(1, 2.5, 3);
 Function6(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
+
+# nested functions
+func Outer() {
+	var a: int = 0;
+
+	func Inner() {
+		var b: dbl = 0.1;
+	}
+
+	Inner();
+}
+
+Outer();

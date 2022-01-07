@@ -27,6 +27,7 @@ namespace TRLang.src.SymbolTable
         public void Insert(Symbol symbol)
         {
             this.Log($"Insert: {symbol} (Scope={this.ScopeName}, Level={this.ScopeLevel})");
+            symbol.Level = this.ScopeLevel;
             this._symbols[symbol.Name] = symbol;
         }
 

@@ -1,3 +1,11 @@
 ﻿func A() {
-	func B() {}
+	var var_in_a: dbl = 1.0;
+
+	func B() {
+		var var_in_b: int = 0;
+	}
+
+	B();
 }
+
+A();
