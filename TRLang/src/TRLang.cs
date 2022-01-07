@@ -51,18 +51,12 @@ namespace TRLang
                 }
             }
             else if (cmdLineCode != null) text = cmdLineCode;
+            else TrShell();
 
-            try
-            {
-                Execute(text);
-            }
-            catch (Error e)
-            {
-                Console.WriteLine($"[!] {e.Message}");
-                if (Flags.ShowInnerStacktrace) Console.WriteLine($"[!] Actual Trace:\n[!] {e.StackTrace.Replace("\n", "\n[!] ")}");
-            }
+            try { Execute(text); }
+            catch (Error e) { LogError(e); }
 
-            if (Flags.PauseAfterExecuting) Console.ReadKey();
+            WaitForKeyToExit();
         }
 
         private static void Execute(string text)
@@ -77,6 +71,43 @@ namespace TRLang
 
             Interpreter interpreter = new Interpreter(parserResult);
             interpreter.Interpret();
+        }
+
+        private static void TrShell()
+        {
+            Console.CancelKeyPress += delegate // Exit when Ctrl + C is pressed
+            {
+                Environment.Exit(0);
+            };
+
+            while (true)
+            {
+                Console.Write("TR Shell> ");
+                string text = Console.ReadLine();
+
+                if (text == null || text.Length == 0) continue;
+
+                try
+                {
+                    Lexer lexer = new Lexer(text);
+                    Parser parser = new Parser(lexer, shellMode: true);
+                    Interpreter interpreter = new Interpreter(parser.ShellParse());
+
+                    Console.WriteLine($"{interpreter.Interpret()}\n");
+                }
+                catch (Error e) { LogError(e); }
+            }
+        }
+
+        private static void LogError(Exception e)
+        {
+            Console.WriteLine($"[!] {e.Message}\n");
+            if (Flags.ShowInnerStacktrace) Console.WriteLine($"[!] Actual Trace:\n[!] {e.StackTrace.Replace("\n", "\n[!] ")}\n");
+        }
+
+        private static void WaitForKeyToExit()
+        {
+            if (Flags.PauseAfterExecuting) Console.ReadKey();
         }
     }
 }

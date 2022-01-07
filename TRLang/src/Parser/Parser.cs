@@ -14,10 +14,14 @@ namespace TRLang.src.Parser
         private Token _currentToken;
         private Token _prevToken = new Token();
 
-        public Parser(Lexer.Lexer lexer)
+        private bool _shellMode;
+
+        public Parser(Lexer.Lexer lexer, bool shellMode = false)
         {
             this._lexer = lexer;
             this._currentToken = this._lexer.GetNextToken();
+
+            this._shellMode = shellMode;
         }
 
         private void Eat(TokenType tokenType)
@@ -37,6 +41,8 @@ namespace TRLang.src.Parser
             Log("Start parsing AST");
             return this.Program();
         }
+
+        public AstNode ShellParse() => this.Expr();
 
         /*
         * GRAMMARS
@@ -103,7 +109,13 @@ namespace TRLang.src.Parser
                     this.Eat(TokenType.Minus);
                     return new UnaryOp(tokenMinus, this.Factor());
 
-                default: return this.Variable();
+                case TokenType.Id:
+                    if (this._shellMode) Error(ErrorCode.UnexpectedToken, this._currentToken);
+                    return this.Variable();
+
+                default:
+                    Error(ErrorCode.UnexpectedToken, this._currentToken);
+                    return null;
             }
         }
 

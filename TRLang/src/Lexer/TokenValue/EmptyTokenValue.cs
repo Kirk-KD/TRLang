@@ -14,6 +14,6 @@ namespace TRLang.src.Lexer.TokenValue
             private set { }
         }
 
-        public override string ToString() => "<Empty Token Value>";
+        public override string ToString() => "<Empty>";
     }
 }
