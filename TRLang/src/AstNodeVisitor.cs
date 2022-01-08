@@ -1,6 +1,7 @@
 ﻿using System;
 using TRLang.src.Parser.AbstractSyntaxTree;
 using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
+using String = TRLang.src.Parser.AbstractSyntaxTree.String;
 
 namespace TRLang.src
 {
@@ -14,6 +15,7 @@ namespace TRLang.src
             {
                 case Int node: return this.Visit(node);
                 case Double node: return this.Visit(node);
+                case String node: return this.Visit(node);
                 case BinOp node: return this.Visit(node);
                 case UnaryOp node: return this.Visit(node);
                 case Compound node: return this.Visit(node);
@@ -35,6 +37,8 @@ namespace TRLang.src
         protected abstract T Visit(Int node);
 
         protected abstract T Visit(Double node);
+
+        protected abstract T Visit(String node);
 
         protected abstract T Visit(BinOp node);
 

@@ -5,6 +5,7 @@ using TRLang.src.Lexer;
 using TRLang.src.Lexer.TokenValue;
 using TRLang.src.Parser.AbstractSyntaxTree;
 using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
+using String = TRLang.src.Parser.AbstractSyntaxTree.String;
 
 namespace TRLang.src.Parser
 {
@@ -91,6 +92,11 @@ namespace TRLang.src.Parser
                     Double dblNode = new Double(this._currentToken);
                     this.Eat(TokenType.Double);
                     return dblNode;
+
+                case TokenType.String:
+                    String strNode = new String(this._currentToken);
+                    this.Eat(TokenType.String);
+                    return strNode;
 
                 case TokenType.LRound:
                     this.Eat(TokenType.LRound);
@@ -329,7 +335,7 @@ namespace TRLang.src.Parser
 
         private void Error(ErrorCode err, Token token, string details = null)
         {
-            throw new ParserError($"{err} caused by {token}" + (details != null ? $" ({details})" : String.Empty));
+            throw new ParserError($"{err} caused by {token}" + (details != null ? $" ({details})" : string.Empty));
         }
 
         private static void Log(string message)

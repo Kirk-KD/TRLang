@@ -24,6 +24,6 @@ namespace TRLang.src.Parser.AbstractSyntaxTree
             this.FuncSymbol = funcSymbol;
         }
 
-        public override string ToString() => $"FuncCall(FuncName={this.FuncName}, ActualParams=[{String.Join(", ", this.ActualParams)}])";
+        public override string ToString() => $"FuncCall(FuncName={this.FuncName}, ActualParams=[{string.Join(", ", this.ActualParams)}])";
     }
 }

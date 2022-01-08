@@ -12,6 +12,6 @@ namespace TRLang.src.Parser.AbstractSyntaxTree
             this.Children = new List<AstNode>();
         }
 
-        public override string ToString() => $"Compound(Children=[{String.Join(", ", this.Children)})])";
+        public override string ToString() => $"Compound(Children=[{string.Join(", ", this.Children)})])";
     }
 }

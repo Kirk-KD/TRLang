@@ -11,19 +11,8 @@ namespace TRLang.src.Lexer
         private int _pos = 0;
         private int _line = 1;
         private int _column = 1;
-        private char _currentChar;
 
-        public char CurrentChar
-        {
-            get
-            {
-                return this._currentChar;
-            }
-            private set
-            {
-                this._currentChar = value;
-            }
-        }
+        public char CurrentChar { get; private set; }
 
         private static readonly Dictionary<string, TokenType> ReservedKeywords = new Dictionary<string, TokenType>
         {
@@ -33,7 +22,8 @@ namespace TRLang.src.Lexer
 
             // Datatypes
             { "int", TokenType.IntType },
-            { "dbl", TokenType.DoubleType }
+            { "dbl", TokenType.DoubleType },
+            { "str", TokenType.StringType }
         };
 
         public Lexer(string text)
@@ -66,33 +56,33 @@ namespace TRLang.src.Lexer
 
         private void SkipComment()
         {
-            while (this._currentChar != Char.MinValue && this._currentChar != '\n') this.Advance();
+            while (this.CurrentChar != Char.MinValue && this.CurrentChar != '\n') this.Advance();
             this.Advance();
         }
 
         private void SkipWhitespace()
         {
-            while (this._currentChar != Char.MinValue && Char.IsWhiteSpace(this._currentChar)) this.Advance();
+            while (this.CurrentChar != Char.MinValue && Char.IsWhiteSpace(this.CurrentChar)) this.Advance();
         }
 
         private Token MakeNumber()
         {
             string result = String.Empty;
 
-            while (this._currentChar != Char.MinValue && Char.IsDigit(this._currentChar))
+            while (this.CurrentChar != Char.MinValue && Char.IsDigit(this.CurrentChar))
             {
-                result += this._currentChar;
+                result += this.CurrentChar;
                 this.Advance();
             }
 
-            if (this._currentChar == '.')
+            if (this.CurrentChar == '.')
             {
-                result += this._currentChar;
+                result += this.CurrentChar;
                 this.Advance();
 
-                while (this._currentChar != Char.MinValue && Char.IsDigit(this._currentChar))
+                while (this.CurrentChar != Char.MinValue && Char.IsDigit(this.CurrentChar))
                 {
-                    result += this._currentChar;
+                    result += this.CurrentChar;
                     this.Advance();
                 }
 
@@ -106,15 +96,32 @@ namespace TRLang.src.Lexer
         {
             string result = String.Empty;
 
-            while (this._currentChar != Char.MinValue && (Char.IsLetterOrDigit(this._currentChar) || this._currentChar == '_'))
+            while (this.CurrentChar != Char.MinValue && (Char.IsLetterOrDigit(this.CurrentChar) || this.CurrentChar == '_'))
             {
-                result += this._currentChar;
+                result += this.CurrentChar;
                 this.Advance();
             }
 
             return new Token(
                 ReservedKeywords.ContainsKey(result) ? ReservedKeywords[result] : TokenType.Id,
                 new StringTokenValue(result), this._line, this._column);
+        }
+
+        private Token MakeString()
+        {
+            this.Advance(); // Skip beginning quote
+
+            string result = String.Empty;
+
+            while (this.CurrentChar != Char.MinValue && this.CurrentChar != '"')
+            {
+                result += this.CurrentChar;
+                this.Advance();
+            }
+
+            this.Advance();
+
+            return new Token(TokenType.String, new StringTokenValue(result), this._line, this._column);
         }
 
         public Token GetNextToken()
@@ -132,6 +139,7 @@ namespace TRLang.src.Lexer
                     this.SkipComment();
                     continue;
                 }
+                else if (this.CurrentChar == '"') return this.MakeString();
                 else if (Char.IsDigit(this.CurrentChar)) return this.MakeNumber();
                 else if (Char.IsLetter(this.CurrentChar)) return this.MakeId();
 

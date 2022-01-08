@@ -26,7 +26,7 @@ namespace TRLang
             );
 
             // Get code to execute
-            string text = String.Empty;
+            string text = string.Empty;
 
             string cmdLineCode = options.Code;
             string filePath = options.Path;

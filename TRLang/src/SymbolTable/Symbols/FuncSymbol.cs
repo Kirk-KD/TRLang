@@ -19,6 +19,6 @@ namespace TRLang.src.SymbolTable.Symbols
             this.Body = node;
         }
 
-        public override string ToString() => $"FuncSymbol(Name={this.Name}, Params=[{(this.Params != null ? String.Join(", ", this.Params) : "")}])";
+        public override string ToString() => $"FuncSymbol(Name={this.Name}, Params=[{(this.Params != null ? string.Join(", ", this.Params) : "")}])";
     }
 }

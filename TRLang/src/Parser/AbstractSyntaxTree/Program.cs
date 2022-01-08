@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TRLang.src.Parser.AbstractSyntaxTree
 {
@@ -12,6 +11,6 @@ namespace TRLang.src.Parser.AbstractSyntaxTree
             this.Nodes = nodes;
         }
 
-        public override string ToString() => $"Program(Node={String.Join(", ", this.Nodes)})";
+        public override string ToString() => $"Program(Node={string.Join(", ", this.Nodes)})";
     }
 }

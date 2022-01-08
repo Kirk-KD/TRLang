@@ -5,6 +5,7 @@ using TRLang.src.SymbolTable.Symbols;
 using System.Collections.Generic;
 using TRLang.src.Lexer;
 using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
+using String = TRLang.src.Parser.AbstractSyntaxTree.String;
 
 namespace TRLang.src
 {
@@ -30,6 +31,8 @@ namespace TRLang.src
         protected override object Visit(Int node) => node.Value;
 
         protected override object Visit(Double node) => node.Value;
+
+        protected override object Visit(String node) => node.Value;
 
         protected override object Visit(BinOp node)
         {

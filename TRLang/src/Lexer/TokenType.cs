@@ -4,6 +4,7 @@
     {
         Int,
         Double,
+        String,
 
         Plus,
         Minus,
@@ -23,6 +24,7 @@
 
         IntType,
         DoubleType,
+        StringType,
 
         Id,
         Eof,
