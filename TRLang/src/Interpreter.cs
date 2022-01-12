@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using TRLang.src.Lexer;
 using Double = TRLang.src.Parser.AbstractSyntaxTree.Double;
 using String = TRLang.src.Parser.AbstractSyntaxTree.String;
+using TRLang.src.Error;
 
 namespace TRLang.src
 {
@@ -38,6 +39,19 @@ namespace TRLang.src
         {
             object leftResult = this.GenericVisit(node.LeftNode);
             object rightResult = this.GenericVisit(node.RightNode);
+
+            if (node.Op.IsType(TokenType.Plus))
+            {
+                if (leftResult is string lstr && rightResult is string rstr)
+                {
+                    return lstr + rstr;
+                }
+
+                if (!(!(leftResult is string) && !(rightResult is string)))
+                    Error(ErrorCode.InvalidOperation, node, $"Both sides of a string addition must be of string types");
+            }
+            else if (!(!(leftResult is string) && !(rightResult is string)))
+                Error(ErrorCode.InvalidOperation, node);
 
             bool leftIsInt = leftResult is int;
             bool rightIsInt = rightResult is int;
@@ -181,6 +195,11 @@ namespace TRLang.src
         private static void Error(string details = "No details")
         {
             throw new Exception($"ERROR IN INTERPRETER SHOULD NOT BE POSSIBLE ({details})");
+        }
+
+        private static void Error(ErrorCode err, AstNode node, string details = null)
+        {
+            throw new InterpreterError($"{err} caused by {node}" + (details != null ? $" ({details})" : string.Empty));
         }
 
         private static void Log(string message)

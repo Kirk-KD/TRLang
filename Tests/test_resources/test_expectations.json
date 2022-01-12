@@ -6,7 +6,10 @@
             "num_3": [ "int", 6 ],
             "num_4": [ "dbl", 0.5 ],
             "num_5": [ "dbl", 154 ],
-            "num_6": [ "int", 11 ]
+            "num_6": [ "int", 11 ],
+            "str_1": [ "str", "hello" ],
+            "str_2": [ "str", "hello world" ],
+            "str_3": [ "str", "hello world" ]
         }
     },
     "p_function": {

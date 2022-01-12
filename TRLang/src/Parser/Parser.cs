@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TRLang.src.Error;
 using TRLang.src.Lexer;
 using TRLang.src.Lexer.TokenValue;
@@ -13,9 +14,8 @@ namespace TRLang.src.Parser
     {
         private readonly Lexer.Lexer _lexer;
         private Token _currentToken;
-        private Token _prevToken = new Token();
 
-        private bool _shellMode;
+        private readonly bool _shellMode;
 
         public Parser(Lexer.Lexer lexer, bool shellMode = false)
         {
@@ -30,10 +30,7 @@ namespace TRLang.src.Parser
             Log($"TokenExpectation: Expected={tokenType}, Actual={this._currentToken.Type}");
 
             if (this._currentToken.IsType(tokenType))
-            {
-                this._prevToken = this._currentToken.Clone();
                 this._currentToken = this._lexer.GetNextToken();
-            }
             else this.Error(ErrorCode.UnexpectedToken, this._currentToken, $"Expected a token of type {tokenType}");
         }
 
@@ -158,9 +155,10 @@ namespace TRLang.src.Parser
         private AstNode TypeSpec()
         {
             Token tok = this._currentToken;
+            TokenType type = this._currentToken.Type;
 
-            if (this._currentToken.IsType(TokenType.IntType)) this.Eat(TokenType.IntType);
-            else this.Eat(TokenType.DoubleType);
+            if ((new TokenType[] { TokenType.IntType, TokenType.DoubleType, TokenType.StringType }).Contains(type))
+                this.Eat(type);
 
             return new TypeSpec(tok);
         }

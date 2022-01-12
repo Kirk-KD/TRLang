@@ -113,8 +113,10 @@ namespace TRLang.src.Lexer
 
             string result = String.Empty;
 
-            while (this.CurrentChar != Char.MinValue && this.CurrentChar != '"')
+            while (this.CurrentChar != '"')
             {
+                if ("\r\n\0".Contains(this.CurrentChar)) Error();
+
                 result += this.CurrentChar;
                 this.Advance();
             }

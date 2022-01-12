@@ -5,6 +5,8 @@
         UnexpectedToken,
         IdNotFound,
         DuplicateId,
-        IncorrectParamsCount
+        IncorrectParamsCount,
+
+        InvalidOperation
     }
 }

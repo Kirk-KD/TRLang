@@ -14,7 +14,7 @@ namespace Tests
 {
     internal class Tests
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Preparing inputs.");
 
@@ -41,8 +41,6 @@ namespace Tests
             }
 
             Console.WriteLine($"Tests done, passed {passes}/{expectedActivationRecords.Count} test case(s).");
-
-            Console.ReadKey();
         }
     }
 }

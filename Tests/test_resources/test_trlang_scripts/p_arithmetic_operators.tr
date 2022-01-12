@@ -5,3 +5,7 @@ var num_4: dbl = 2 / 4;
 
 var num_5: dbl = (2 + 3 * (4 + 5) / 2) * 10 - 1;   # 154
 var num_6: int = +-+-++---+-10 + 1;                # 11
+
+var str_1: str = "hello";
+var str_2: str = "hello " + "world";
+var str_3: str = "he" + "llo " + "wor" + "ld";

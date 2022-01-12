@@ -64,6 +64,7 @@ namespace Tests
                         {
                             case "int": expected = rawExpected.GetInt32(); break;
                             case "dbl": expected = rawExpected.GetDouble(); break;
+                            case "str": expected = rawExpected.GetString(); break;
 
                             default: throw new Exception($"Invalid type specification \"{type}\"");
                         }
